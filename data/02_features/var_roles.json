@@ -1,0 +1,90 @@
+{
+  "outcome": [
+    "lwti"
+  ],
+  "treatment": [
+    "lpri"
+  ],
+  "instrument": [
+    "d2pri",
+    "d2pri_jp"
+  ],
+  "controls_baseline": [
+    "llwip",
+    "dllgop",
+    "l2lwip",
+    "dl2lgop"
+  ],
+  "controls_alliance": [
+    "dlpri_jp",
+    "dlpri_aus",
+    "dlpri_cds",
+    "dlpri_fra",
+    "dlpri_ger",
+    "dlpri_india",
+    "dlpri_indo",
+    "dlpri_pak",
+    "dlpri_rus",
+    "dlpri_vn",
+    "dlpri_uk"
+  ],
+  "controls_macro": [
+    "vix",
+    "dvix",
+    "gs10",
+    "tb3ms",
+    "term_spread",
+    "tedrate",
+    "lreer",
+    "lgold",
+    "lbdi",
+    "lip",
+    "gscpi",
+    "lepu",
+    "brent_wti_spread",
+    "cny_usd",
+    "cny_vol",
+    "ldxy",
+    "us_spread",
+    "us_ig_oas",
+    "us_bbb_oas",
+    "em_oas"
+  ],
+  "controls_all_ml": [
+    "llwip",
+    "dllgop",
+    "l2lwip",
+    "dl2lgop",
+    "dlpri_jp",
+    "dlpri_aus",
+    "dlpri_cds",
+    "dlpri_fra",
+    "dlpri_ger",
+    "dlpri_india",
+    "dlpri_indo",
+    "dlpri_pak",
+    "dlpri_rus",
+    "dlpri_vn",
+    "dlpri_uk",
+    "vix",
+    "dvix",
+    "gs10",
+    "tb3ms",
+    "term_spread",
+    "tedrate",
+    "lreer",
+    "lgold",
+    "lbdi",
+    "lip",
+    "gscpi",
+    "lepu",
+    "brent_wti_spread",
+    "cny_usd",
+    "cny_vol",
+    "ldxy",
+    "us_spread",
+    "us_ig_oas",
+    "us_bbb_oas",
+    "em_oas"
+  ]
+}
