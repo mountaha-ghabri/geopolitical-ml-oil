@@ -14,7 +14,7 @@ Reference package: [Saadaoui_2026 folder](https://github.com/JamelSaadaoui/Resea
 - `original/`
   - original `.do` and `.log` from author
 - `data/`
-  - place `Saadaoui_2026_JCE.dta` here
+  - placed `Saadaoui_2026_JCE.dta` here
   - `data/cache/` stores parquet cache
 - `figures/`
   - generated plots
@@ -49,7 +49,7 @@ Documented in `docs/ML_EXTENSION_PLAYBOOK.md`:
 - what failed
 - why it failed
 - what is retained as robust
-- what should be reported as robustness only
+- what was reported as robustness only
 
 ## Contribution Log
 
