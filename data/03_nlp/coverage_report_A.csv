@@ -1,0 +1,36 @@
+source,variable,n_months,pct_filled,start,end,recommend
+GDELT structured,gdelt_total_events_log,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_protest_share,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_military_share,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_diplomatic_share,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_goldstein_mean,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_sentiment_signal,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_01_statement,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_02_appeal,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_03_intent_cooperate,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_04_consult,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_05_diplomatic_coop,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_06_material_coop,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_07_provide_aid,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_08_yield,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_09_investigate,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_10_demand,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_11_disapprove,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_12_reject,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_13_threaten,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_14_protest,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_15_exhibit_force,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_16_reduce_relations,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_17_coerce,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_18_assault,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_19_fight,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_topic_20_mass_violence,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_conflict_share,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_coop_share,386,100.0,1990-01,2022-02,PRIMARY
+GDELT structured,gdelt_hostility_share,386,100.0,1990-01,2022-02,PRIMARY
+GPR (Caldara‑Iacoviello),gpr,381,98.7,1990-01,2021-09,PRIMARY
+GPR (Caldara‑Iacoviello),gpr_threats,381,98.7,1990-01,2021-09,PRIMARY
+GPR (Caldara‑Iacoviello),gpr_acts,381,98.7,1990-01,2021-09,PRIMARY
+EA‑GPR (Bondarenko),ea_gpr,290,75.1,1998-01,2022-02,ROBUSTNESS
+EA‑GPR (Bondarenko),ea_gpr_diff,289,74.9,1998-02,2022-02,ROBUSTNESS
+WUI (World Uncertainty),wui,386,100.0,1990-01,2022-02,PRIMARY
