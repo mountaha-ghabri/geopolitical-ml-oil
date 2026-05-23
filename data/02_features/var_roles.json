@@ -46,7 +46,6 @@
   ],
   "controls_macro_sparse": [
     "lepu",
-    "gscpi",
     "em_fx_vol"
   ],
   "controls_macro": [
@@ -65,14 +64,12 @@
     "lbdi",
     "lip",
     "lepu",
-    "gscpi",
     "em_fx_vol"
   ],
   "EXCLUDED_zero_coverage": [
     "em_oas"
   ],
   "controls_sparse": [
-    "gscpi",
     "lepu",
     "em_fx_vol"
   ],
@@ -138,7 +135,6 @@
     "lbdi",
     "lip",
     "lepu",
-    "gscpi",
     "em_fx_vol"
   ]
 }

@@ -1,0 +1,8 @@
+name,code,instrument,F_diag,F_min_lp,sig_iv,sig_ols,sig_rf,h12_iv,h12_ols,bias,strong
+US–China,us,d2pri,194.5,195.2,15,18,0,-0.0245,-0.0055,IV<OLS,True
+Japan–China,jp,d2pri_jp,112.8,101.5,0,0,0,-0.2118,-0.2248,IV>OLS,True
+Australia–China,aus,L1dlpri_aus,54.5,6.5,9,35,8,-0.2435,0.1888,IV<OLS,True
+France–China,fra,L2dlpri_fra,11.5,10.4,0,45,0,-0.1168,0.4971,IV<OLS,False
+Germany–China,ger,L1dlpri_ger,11.9,12.5,3,46,3,1.7449,2.5087,IV<OLS,False
+Russia–China,rus,L2dlpri_rus,26.9,5.8,26,41,26,0.5978,0.2395,IV>OLS,False
+UK–China,uk,L2dlpri_uk,46.3,2.5,1,41,1,0.025,0.3555,IV<OLS,True
