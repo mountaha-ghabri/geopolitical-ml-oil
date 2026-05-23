@@ -1,0 +1,54 @@
+{
+  "instrument_core": [
+    "d2pri"
+  ],
+  "instrument_alt": [
+    "uct_tension_l1",
+    "gpr_global_l1"
+  ],
+  "treatment": [
+    "lpri"
+  ],
+  "outcome": [
+    "lwti"
+  ],
+  "controls_core": [
+    "llwip",
+    "dllgop",
+    "dl2lgop"
+  ],
+  "controls_macro": [
+    "vix",
+    "gs10",
+    "tb3ms",
+    "baa10y",
+    "brent",
+    "gold",
+    "bdi",
+    "cny_usd",
+    "indpro"
+  ],
+  "controls_geopol": [
+    "gpr_chn_l1",
+    "gpr_usa_l1"
+  ],
+  "heterogeneity": [
+    "vix",
+    "uct_tension_l1",
+    "gpr_global_l1"
+  ],
+  "diagnostic_only": [
+    "tedrate",
+    "us_spread",
+    "unemp",
+    "cpi",
+    "dxy",
+    "reer",
+    "copper",
+    "wheat",
+    "em_fx",
+    "gdelt_events",
+    "finbert_net",
+    "ea_gpr"
+  ]
+}
