@@ -20,8 +20,6 @@
   "controls_macro": [
     "vix",
     "gs10",
-    "tb3ms",
-    "baa10y",
     "brent",
     "gold",
     "bdi",
@@ -37,6 +35,11 @@
     "uct_tension_l1",
     "gpr_global_l1"
   ],
+  "regime_vars": [
+    "regime_vix",
+    "regime_uct",
+    "post_2015"
+  ],
   "diagnostic_only": [
     "tedrate",
     "us_spread",
@@ -46,34 +49,6 @@
     "reer",
     "copper",
     "wheat",
-    "em_fx",
-    "gdelt_events",
-    "finbert_net",
-    "ea_gpr"
-  ],
-  "controls_nlp_gdelt": [
-    "gdelt_total_events_log",
-    "gdelt_goldstein_mean",
-    "gdelt_sentiment_signal",
-    "gdelt_conflict_share",
-    "gdelt_hostility_share",
-    "gdelt_topic_pca_1",
-    "gdelt_topic_pca_2",
-    "gdelt_topic_pca_3",
-    "gdelt_topic_pca_4",
-    "gdelt_topic_pca_5"
-  ],
-  "controls_nlp_extra": [
-    "gpr",
-    "ea_gpr",
-    "wui"
-  ],
-  "controls_nlp_bert": [
-    "finbert_net",
-    "finbert_neg_mean",
-    "finbert_pos_mean",
-    "bertopic_conflict"
-  ],
-  "nlp_short_sample_start": "2015-04",
-  "nlp_short_sample_end": "2022-02"
+    "em_fx"
+  ]
 }

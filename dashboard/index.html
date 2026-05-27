@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geopolitical Shocks & Oil Prices — Saadaoui (2026) Extension</title>
+
+  <!--
+    Geopolitical Turning Points and Macroeconomic Volatility
+    Interactive Dashboard — ML Extension of Saadaoui (2026, JCE)
+
+    Author : Montaha Ghabri, M2 Business Analytics, Tunis Business School
+    Supervisor : Dr. Naceur Khraief
+
+    Data paths are relative to the project root:
+      ../results/10_panel/           — panel IRF CSVs, dyad summary, Chow tests
+      ../results/01_baseline_replication_saadaoui/ — baseline US-China IRF
+      ../results/08_structural_breaks/ — rolling estimates
+      ../results/09_multi_outcome_lp_iv/ — multi-outcome IRFs
+
+    All IRF data is read at runtime via fetch(). No values are hardcoded.
+  -->
+
+  <!-- Map library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Typography: Playfair Display (scholarly serif) + IBM Plex Mono (data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       HEADER
+       Contains the project title, authors, and primary navigation tabs.
+  ═══════════════════════════════════════════════════════════════════ -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="header-seal" aria-hidden="true">地缘</div>
+      <div class="header-text">
+        <h1>Bilateral Geopolitical Shocks &amp; Oil Price Volatility</h1>
+        <p>ML Extension · Saadaoui (2026, <em>JCE</em>) · Montaha Ghabri, TBS · Supervisor: Dr. N. Khraief</p>
+      </div>
+    </div>
+    <nav class="tab-nav" role="navigation" aria-label="Dashboard sections">
+      <button class="tab-btn active" data-tab="map">
+        <span class="tab-icon">◉</span> Network
+      </button>
+      <button class="tab-btn" data-tab="irf">
+        <span class="tab-icon">⟿</span> Impulse Responses
+      </button>
+      <button class="tab-btn" data-tab="breaks">
+        <span class="tab-icon">⊘</span> Structural Breaks
+      </button>
+      <button class="tab-btn" data-tab="outcomes">
+        <span class="tab-icon">◈</span> Multi-Outcome
+      </button>
+      <button class="tab-btn" data-tab="method">
+        <span class="tab-icon">⊞</span> Methodology
+      </button>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MAIN LAYOUT — sidebar (controls + dyad list) + content area
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="app-body">
+
+    <!-- ───────────────────────────────────────────────────────────────
+         LEFT SIDEBAR
+         Contains dyad leaderboard and the detail card for the
+         currently selected dyad.
+    ─────────────────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Dyad leaderboard -->
+      <div class="sidebar-section">
+        <div class="sidebar-hd">
+          <span>Country Dyads</span>
+          <select id="sort-select" class="sort-select" aria-label="Sort criterion">
+            <option value="fstat">Sort: F-stat</option>
+            <option value="sig">Sort: Significance</option>
+          </select>
+        </div>
+
+        <!-- "Show all" summary button -->
+        <button class="dyad-row all-btn" id="row-all" onclick="App.selectDyad('all')">
+          <span class="dyad-flag">⊕</span>
+          <span class="dyad-label">All dyads — panel summary</span>
+        </button>
+
+        <!-- Dyad rows injected by JS -->
+        <div id="leaderboard" role="list"></div>
+      </div>
+
+      <!-- Detail card — updated when a dyad is selected -->
+      <div class="dyad-card" id="dyad-card" aria-live="polite">
+        <div class="dc-header">
+          <div class="dc-title-wrap">
+            <span class="dc-flag" id="dc-flag"></span>
+            <div>
+              <div class="dc-name" id="dc-name">Select a dyad</div>
+              <div class="dc-sub" id="dc-sub"></div>
+            </div>
+          </div>
+          <span class="dc-badge" id="dc-badge"></span>
+        </div>
+
+        <div class="dc-grid" id="dc-grid">
+          <div class="dc-cell">
+            <span class="dc-label">First-stage F</span>
+            <span class="dc-val" id="dc-fstat">—</span>
+          </div>
+          <div class="dc-cell">
+            <span class="dc-label">Sig. horizons</span>
+            <span class="dc-val" id="dc-sig">—</span>
+          </div>
+          <div class="dc-cell">
+            <span class="dc-label">h=6 coef</span>
+            <span class="dc-val" id="dc-h6">—</span>
+          </div>
+          <div class="dc-cell">
+            <span class="dc-label">h=12 coef</span>
+            <span class="dc-val" id="dc-h12">—</span>
+          </div>
+          <div class="dc-cell">
+            <span class="dc-label">h=32 coef</span>
+            <span class="dc-val" id="dc-h32">—</span>
+          </div>
+          <div class="dc-cell">
+            <span class="dc-label">Instrument</span>
+            <span class="dc-val mono" id="dc-instr">—</span>
+          </div>
+        </div>
+
+        <p class="dc-note" id="dc-note"></p>
+      </div>
+
+    </aside>
+
+    <!-- ───────────────────────────────────────────────────────────────
+         CONTENT AREA — one panel per tab
+    ─────────────────────────────────────────────────────────────────── -->
+    <main class="content" role="main">
+
+      <!-- ── MAP TAB ─────────────────────────────────────────────── -->
+      <section class="tab-pane active" id="pane-map" aria-label="Network map">
+        <div class="pane-header">
+          <div>
+            <h2>Bilateral Transmission Network</h2>
+            <p>China (red fill) as geopolitical hub. Edge weight = first-stage F-statistic. Click any country marker or leaderboard row to inspect.</p>
+          </div>
+          <div class="map-legend">
+            <span><span class="leg-line solid"></span> Strong instrument (F ≥ 10)</span>
+            <span><span class="leg-line dashed"></span> Weak instrument (F &lt; 10)</span>
+          </div>
+        </div>
+        <div id="map" role="img" aria-label="World map showing bilateral geopolitical transmission channels from China"></div>
+      </section>
+
+      <!-- ── IRF TAB ─────────────────────────────────────────────── -->
+      <section class="tab-pane" id="pane-irf" aria-label="Impulse response functions">
+        <div class="pane-header">
+          <div>
+            <h2 id="irf-title">Impulse Response Function</h2>
+            <p>Δ²PRI shock → log WTI (or selected dyad outcome). Horizons 0–48 months. 90% CI shaded. Real data loaded from <code>results/</code>.</p>
+          </div>
+          <div class="irf-controls">
+            <select id="irf-spec-select" class="sort-select" aria-label="IRF specification">
+              <option value="iv">LP-IV (causal)</option>
+              <option value="ols">LP-OLS (biased baseline)</option>
+              <option value="dml_linear">DML Linear</option>
+              <option value="dml_xgb">DML XGBoost</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-area" id="irf-area">
+          <div class="loading-msg" id="irf-loading">← Select a dyad from the sidebar</div>
+          <canvas id="irf-canvas" style="display:none"></canvas>
+        </div>
+        <div class="irf-footnote" id="irf-foot"></div>
+      </section>
+
+      <!-- ── STRUCTURAL BREAKS TAB ──────────────────────────────── -->
+      <section class="tab-pane" id="pane-breaks" aria-label="Structural break analysis">
+        <div class="pane-header">
+          <div>
+            <h2>Structural Break at 2015</h2>
+            <p>Rolling IV-LP coefficients at h=6, 12, 24. Pre-2015: 25/49 significant horizons. Post-2015: 5/49. Chow tests confirm break at p&lt;0.001 at all horizons.</p>
+          </div>
+          <div class="irf-controls">
+            <select id="rolling-h-select" class="sort-select" aria-label="Rolling horizon">
+              <option value="h6">Rolling h=6</option>
+              <option value="h12">Rolling h=12</option>
+              <option value="h24">Rolling h=24</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-area">
+          <canvas id="breaks-canvas"></canvas>
+        </div>
+        <div class="chow-table" id="chow-table"></div>
+      </section>
+
+      <!-- ── MULTI-OUTCOME TAB ───────────────────────────────────── -->
+      <section class="tab-pane" id="pane-outcomes" aria-label="Multi-outcome impulse responses">
+        <div class="pane-header">
+          <div>
+            <h2>Multi-Outcome Spillover</h2>
+            <p>US–China Δ²PRI shock response across 7 macroeconomic outcomes. WTI is the primary channel (16/49 horizons). Data from <code>results/09_multi_outcome_lp_iv/</code>.</p>
+          </div>
+          <div class="irf-controls">
+            <select id="outcome-select" class="sort-select" aria-label="Select outcome">
+              <option value="lwti">WTI Oil Price</option>
+              <option value="brent">Brent Crude</option>
+              <option value="gold">Gold</option>
+              <option value="vix">VIX</option>
+              <option value="cny_usd">CNY/USD</option>
+              <option value="bdi">Baltic Dry Index</option>
+              <option value="gs10">10Y Treasury</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-area">
+          <canvas id="outcomes-canvas"></canvas>
+        </div>
+        <div class="outcome-summary" id="outcome-summary"></div>
+      </section>
+
+      <!-- ── METHODOLOGY TAB ────────────────────────────────────── -->
+      <section class="tab-pane method-tab" id="pane-method" aria-label="Methodology">
+        <div class="method-grid">
+
+          <article class="method-card accent">
+            <h3>Research Question</h3>
+            <p>Can machine learning methods reproduce and extend the causal findings of Saadaoui (2026)?
+            We apply Double ML and panel local projections to test robustness, extending the original
+            US–China and Japan–China dyads to 11 additional bilateral relationships with China.</p>
+          </article>
+
+          <article class="method-card">
+            <h3>Identification Strategy</h3>
+            <p>The instrument is <strong>Δ²PRI</strong> — the second difference of the bilateral Political
+            Relationship Index, constructed from Chinese government and media sources:</p>
+            <div class="math-block">Δ²PRI<sub>t</sub> = PRI<sub>t</sub> − 2·PRI<sub>t−1</sub> + PRI<sub>t−2</sub></div>
+            <p>Sharp deviations from established diplomatic trajectories are exogenous to oil markets.
+            The US–China first-stage F-statistic exceeds 190, confirming strong identification.</p>
+          </article>
+
+          <article class="method-card">
+            <h3>Estimation Methods</h3>
+            <ul>
+              <li><strong>Linear IV-LP</strong> — baseline, following Saadaoui (2026) and Jordà (2005)</li>
+              <li><strong>Double ML (DML-PLIV)</strong> — XGBoost nuisance partialling; confirms linear spec adequate (0/49, stable SE)</li>
+              <li><strong>IVW meta-analytic pooling</strong> — inverse-variance weighted across dyads; I²&lt;5% for strong dyads</li>
+              <li><strong>CCE-LP (Pesaran 2006)</strong> — corrects for cross-sectional dependence across dyads</li>
+              <li><strong>CF panel</strong> — control-function estimator; 0/49 due to common-slope restriction</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3>Core Findings</h3>
+            <ul>
+              <li>Placebo test (500 permutations): <strong>p = 0.000</strong> — result is not random</li>
+              <li>Sign reversal confirmed: negative at h=6, positive at h=32</li>
+              <li>GPR-USA reduced form: <strong>41/49</strong> significant horizons</li>
+              <li>GPR-China reduced form: <strong>3/49</strong> — Chinese domestic risk does not drive oil</li>
+              <li>Structural break at 2015: Chow p &lt; 0.001 at every horizon tested</li>
+              <li>Pre-2015: 25/49 significant. Post-2015: 5/49</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3>Honest Limitations</h3>
+            <ul>
+              <li>Small sample n=385 — limits DML convergence and panel power</li>
+              <li>Instrument strong only for US–China and Japan–China; most other dyads F&lt;15</li>
+              <li>Japan–China: F=113 but 0/49 significant — the channel is US-specific</li>
+              <li>Asymmetry test is directionally consistent but severely underpowered (MDE=1.40, observed diff=0.25)</li>
+              <li>No Python equivalent of Stata's <code>ivqregress</code>; quantile results are exploratory</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3>Data Sources</h3>
+            <ul>
+              <li>PRI: Tsinghua University Institute of International Relations (bilateral, 1990–2022)</li>
+              <li>WTI: EIA monthly spot price (log real), via Saadaoui (2026) replication dataset</li>
+              <li>Controls: OECD+6 industrial production, global oil production (Baumeister &amp; Hamilton 2019)</li>
+              <li>GPR indices: Caldara &amp; Iacoviello (2022)</li>
+              <li>GDELT: structured event tone (NB03, partial coverage)</li>
+              <li>Sample: January 1990 – February 2022 · n = 385 monthly observations</li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       LOADING OVERLAY — shown while CSV files are being fetched
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-inner">
+      <div class="loading-seal">地缘</div>
+      <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+      <p id="loading-msg">Loading results data…</p>
+    </div>
+  </div>
+
+  <!-- External libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- Application code -->
+  <script src="app.js"></script>
+
+</body>
+</html>
