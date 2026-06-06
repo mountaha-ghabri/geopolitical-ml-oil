@@ -8,3 +8,11 @@ __pycache__/
 
 # Allow parquets inside the outputs/ folder
 !outputs/**/*.parquet
+
+# Ignore all files inside these raw NLP data directories
+data/03_nlp/gdelt/**/*
+data/03_nlp/icews/**/*
+data/03_nlp/phoenix/**/*
+
+# Always allow .gitkeep files so the empty folders are pushed to GitHub
+!.gitkeep
