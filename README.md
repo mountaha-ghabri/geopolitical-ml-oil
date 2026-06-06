@@ -1,7 +1,7 @@
 # Geopolitical Turning Points and Oil Price Dynamics
 ### Replication and ML Extension of Saadaoui (2026, Journal of Comparative Economics)
 
-**Author:** Montaha Ghabri · montahaghabry@gmail.com
+**Author:** Montaha Ghabri · montahaghabry@gmail.com  
 **Supervisor:** Professor Naceur Khraief
 **Institution:** Tunis Business School, University of Tunis · M2 Business Analytics
 
