@@ -1,0 +1,10 @@
+# Ignore all zip files and cache directories
+*.zip
+.cache/
+__pycache__/
+
+# Ignore all parquet files everywhere...
+*.parquet
+
+# Allow parquets inside the outputs/ folder
+!outputs/**/*.parquet
