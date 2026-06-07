@@ -1,31 +1,4 @@
 # Geopolitical Turning Points and Oil Price Dynamics
-
-### Replication and ML Extension of Saadaoui (2026, Journal of Comparative Economics)
-
-**Author:** Montaha Ghabri · moontahaghabry@gmail.com
-**Supervisor:** Professor Naceur Khraief
-**Institution:** Tunis Business School, University of Tunis · M2 Business Analytics
-
----
-
-## Context
-
-This is the computational pipeline for a master's thesis extending [Saadaoui (2026)](https://crawford.anu.edu.au/cama/research/geopolitical-turning-points-and-macroeconomic-volatility-bilateral-identification), who constructs a
-bilateral Political Relationship Index (PRI) and uses its second difference (Δ²PRI) as an instrument
-to identify abrupt diplomatic turning points and estimate their causal effect on world oil prices via
-instrumental variable local projections (LP-IV), for the China-USA dyad at monthly frequency 1990–2022.
-
-**Three extensions are implemented:**
-
-1. **Measurement.** A composite geopolitical index aggregating five independent NLP pipelines:
-   GDELT event scores, ICEWS Goldstein scores, Phoenix SWB, Phoenix NYT, and FinBERT financial
-   sentiment. Used as nuisance control in DML, not as an instrument (weak F = 2.59).
-2. **Single-dyad causal ML (CHN-USA).** Double/Debiased ML with XGBoost nuisance,
-   Chernozhukov-Hansen (2005) Algorithm 1 IV quantile local projections, regime heterogeneity,
-   wild bootstrap CIs, Anderson-Rubin confidence sets, BH multiple testing correction,
-   sup-Wald structural break test.
-=======
-# Geopolitical Turning Points and Oil Price Dynamics
 ### Replication and ML Extension of Saadaoui (2026, Journal of Comparative Economics)
 
 **Author:** Montaha Ghabri · moontahaghabry@gmail.com  
@@ -52,7 +25,6 @@ instrumental variable local projections (LP-IV), for the China-USA dyad at month
    wild bootstrap CIs, Anderson-Rubin confidence sets, BH multiple testing correction,
    sup-Wald structural break test.
 
->>>>>>> af4e5fc3b8097a03c8375cf6e8ea8f47b62d4623
 3. **Panel extension (12 dyads).** LP-IV for 8 valid dyads, IVW pooled estimator, pooled DML
    with dyad fixed effects (n ≈ 3,000), causal forest with ICEWS attention-share moderator,
    Diebold-Yilmaz connectedness, Granger causality network, Graph Attention Network.
@@ -107,17 +79,6 @@ pip install -r requirements.txt
 
 **Run notebooks in this order:**
 
-<<<<<<< HEAD
-| Step | Notebook                                      | Purpose                               | Runtime     |
-| ---- | --------------------------------------------- | ------------------------------------- | ----------- |
-| 1    | `00_explore_and_validate`                   | Data audit, source coverage           | ~90 min     |
-| 2    | `01_baseline_replication_saadaoui`          | LP-IV replication matching Stata      | ~2 min      |
-| 3    | `02_composite_index_construction`           | Build 5-source GPR index              | ~10 sec     |
-| 4    | `03_macro_controls_feature_engineering`     | Download/proxy macro controls         | ~2 min      |
-| 5    | `04_instrument_diagnostics_and_macro_merge` | First-stage F-stats, master panel     | ~1 min      |
-| 6    | `05_dml_quantile_iv_lp_clean`               | **Main single-dyad estimation** | ~60–90 min |
-| 7    | `06_panel_network_causal_forest_merge`      | **Panel + network extension**   | ~50–70 min |
-=======
 | Step | Notebook | Purpose | Runtime |
 |------|----------|---------|---------|
 | 1 | `00_explore_and_validate` | Data audit, source coverage | ~90 min |
@@ -127,7 +88,6 @@ pip install -r requirements.txt
 | 5 | `04_instrument_diagnostics_and_macro_merge` | First-stage F-stats, master panel | ~1 min |
 | 6 | `05_dml_quantile_iv_lp_clean` | **Main single-dyad estimation** | ~60–90 min |
 | 7 | `06_panel_network_causal_forest_merge` | **Panel + network extension** | ~50–70 min |
->>>>>>> af4e5fc3b8097a03c8375cf6e8ea8f47b62d4623
 
 NB05 and NB06 are the primary outputs. All earlier notebooks feed into them and only need to
 be rerun if you want to change the data pipeline.
