@@ -1,181 +1,171 @@
-# Geopolitical Turning Points and Macroeconomic Volatility
 
-### Empirical Replication & Dyadic Extensions of Saadaoui (2026, JCE)
+# Geopolitical Turning Points and Oil Price Dynamics
 
-**Author:** Montaha Ghabri ([montahaghabry@gmail.com]())
+### Replication and ML Extension of Saadaoui (2026, Journal of Comparative Economics)
 
-**Supervisor:** Dr. Naceur Khraief
+**Author:** Montaha Ghabri · moontahaghabry@gmail.com
+**Supervisor:** Professor Naceur Khraief
+**Institution:** Tunis Business School, University of Tunis · M2 Business Analytics
 
-**Institution:** Tunis Business School (TBS), University of Tunis
+---
 
-**Program:** Master of Research in Business Analytics (M2)
+## Context
 
-## 📌 Project Overview & Scope Realism
+This is the computational pipeline for a master's thesis extending [Saadaoui (2026)](https://crawford.anu.edu.au/cama/research/geopolitical-turning-points-and-macroeconomic-volatility-bilateral-identification), who constructs a
+bilateral Political Relationship Index (PRI) and uses its second difference (Δ²PRI) as an instrument
+to identify abrupt diplomatic turning points and estimate their causal effect on world oil prices via
+instrumental variable local projections (LP-IV), for the China-USA dyad at monthly frequency 1990–2022.
 
-This repository contains the replication code and empirical extensions for my Master's thesis, building directly upon the econometric framework of  **[Saadaoui (2026, JCE)](https://crawford.anu.edu.au/sites/default/files/2026-02/08_2026_Saadaoui.pdf)** .
+**Three extensions are implemented:**
 
-To the best of our knowledge, this is an attempt to evaluate the external validity of the original US-China Geopolitical Predictability Index (PRI) shock transmission to global oil markets. We extend the baseline framework across 11 additional global bilateral country-dyads, audit historical parameter stability across key structural break thresholds, and transparently document the performance boundaries of Machine Learning (DML) and non-linear specifications when applied to small-sample macro data (**$n=385$**).
+1. **Measurement.** A composite geopolitical index aggregating five independent NLP pipelines:
+   GDELT event scores, ICEWS Goldstein scores, Phoenix SWB, Phoenix NYT, and FinBERT financial
+   sentiment. Used as nuisance control in DML, not as an instrument (weak F = 2.59).
+2. **Single-dyad causal ML (CHN-USA).** Double/Debiased ML with XGBoost nuisance,
+   Chernozhukov-Hansen (2005) Algorithm 1 IV quantile local projections, regime heterogeneity,
+   wild bootstrap CIs, Anderson-Rubin confidence sets, BH multiple testing correction,
+   sup-Wald structural break test.
+3. **Panel extension (12 dyads).** LP-IV for 8 valid dyads, IVW pooled estimator, pooled DML
+   with dyad fixed effects (n ≈ 3,000), causal forest with ICEWS attention-share moderator,
+   Diebold-Yilmaz connectedness, Granger causality network, Graph Attention Network.
 
-> [!NOTE]
->
-> **Replication & Support:** This repository is fully open-sourced to ensure absolute empirical reproducibility. If you encounter any execution queries, package environment mismatches, or data alignment discrepancies, please  **[open a GitHub Issue](https://www.google.com/search?q=https://github.com/mountaha-ghabri/geopolitical-ml-oil/issues)** .
+---
 
-## Empirical Findings & Methodological Disclosures
-
-Rather than masking statistical insignificance behind complex machine learning architectures, this thesis prioritizes empirical transparency. The actual findings from our pipeline show clear success in baseline extensions, alongside definitive statistical boundaries for high-dimensional models:
-
-### 1. Robustness of the Core US-China Causal Signature
-
-* **Finding:** Placebo data permutation tests (500 iterations) confirm that the baseline US-China PRI **$\rightarrow$** WTI transmission wave is non-random (**$placebo\ p = 0.000$**). The temporal response pattern matches the original paper, confirming a distinct  **sign reversal** : a significant negative asset drop in the short run (**$h = 6$**) followed by an inflationary upward correction in the medium run (**$h = 32$**). Anderson-Rubin confidence intervals confirm identification remains highly valid through **$h \approx 36$**; after that, precision gradually declines due to smaller effective sample sizes at long horizons.
-
-### 2. The Asymmetry of Superpower Risk (GPR-USA vs. GPR-China)
-
-* **Finding:** The transmission vector is heavily driven by Western risk perception. Domestic US perception of geopolitical risk (`GPR-USA`) heavily drives global oil prices, yielding  **41 out of 49 significant monthly horizons** . Conversely, Chinese domestic risk (`GPR-China`) exhibits near-zero predictive power, registering only  **3 out of 49 significant horizons** .
-
-### 3. The Post-2015 Structural Collapse
-
-* **Finding:** Parameter stability is highly regime-dependent over time. Formal Chow structural stability tests confirm a permanent structural break (**$p < 0.001$** across all horizons) around the 2015 geopolitical trade pivot. Pre-2015, the structural transmission mechanism is highly potent (25/49 significant horizons); post-2015, the historical impulse response collapses completely, leaving only 5 out of 49 horizons significant.
-
-### 4. Dyadic Instrument Heterogeneity & Endogeneity Audits
-
-* **Finding:** The baseline identification strategy does not automatically generalize worldwide. Out of the 11 alternative bilateral country-dyads tested via Inverse-Variance Weighted (IVW) panel pooling, instrument behavior and transmission profiles vary drastically:
-  * **The Japan Null:** Japan-China displays strong first-stage instrument strength (**$F = 113$**) yet yields  **0/49 significant horizons** —a genuine null indicating that the underlying transmission mechanism is uniquely US-specific.
-  * **The Anglo-Pacific Disconnect:** Australia (**$F = 54.5$**) and the United Kingdom (**$F = 46.3$**) also display robust first-stage F-statistics, yet yield near-zero significant horizons (9/49 and 1/49 respectively). **This confirms that strong instrument identification is necessary but not sufficient for structural transmission—the causal channel is US-specific.**
-  * **Endogeneity Mitigation:** For France and Germany, IV estimates (0 to 3 out of 49 significant horizons) sharply contrast with baseline OLS runs (which naively report 45 to 46 significant horizons). This confirms that our IV configuration successfully strips out the severe upward endogeneity bias present in standard macro correlations. The remaining country-dyads suffer from severe weak instrument limitations (**$F < 15$**) or fail fundamental exogeneity diagnostics.
-
-### 5. Honest Methodological Boundaries (Appendix Commitments)
-
-* **Double/Debiased ML (PLIV) Boundaries:** Attempting to control for high-dimensional predictors using Partially Linear IV DoubleML (with an XGBoost nuisance setup) proved uninformative for our primary models. Due to small-sample constraints (**$n=385$**), cross-fitting inflated the median standard errors (**$\text{SE} > 0.6$**), rendering **$0/49$** horizons statistically significant. These regularized results are transparently moved to the **Thesis Appendix** as an exploration of small-sample boundaries.
-* **Continuous Interaction & STLP-IV Failure:** Modeling state-dependence through continuous interaction instruments (e.g., **$d2pri \times VIX$**) is structurally invalid here; weak instrument audits confirm the modifier adds zero incremental power (**$F_{\text{interaction}} \approx 0.36$**). Furthermore, Smooth Transition Local Projections (STLP-IV) collapsed due to data scarcity, isolating only ~27 monthly observations into the high-stress state. Consequently, non-linear insights are derived strictly using discrete Subsample Regime Splitting (Ramey & Zubairy, 2018 topology) in the main text.
-
-## 🛠️ Environment Setup & Installation
-
-This project is built using a clean scientific stack in  **Python 3.10+** .
-
-**Bash**
+## Repository Structure
 
 ```
-# Clone the repository
+macro-geopolitics/
+│
+├── notebooks/                              ← Main analysis notebooks (run in order)
+│   ├── 00_explore_and_validate.ipynb
+│   ├── 01_baseline_replication_saadaoui.ipynb
+│   ├── 02_composite_index_construction.ipynb
+│   ├── 02_macro_controls_feature_engineering.ipynb
+│   ├── 03_instrument_diagnostics_and_macro_merge.ipynb
+│   ├── 05_dml_quantile_iv_lp_clean.ipynb       ← Core single-dyad results
+│   └── 06_panel_network_causal_forest_merge.ipynb ← Panel + network extension
+│
+├── notebooks/data_acquisition/             ← GDELT download scripts (optional)
+│   ├── 01_gdelt_event_panel.ipynb
+│   └── 02_gdelt_corpus.ipynb
+│
+├── data/
+│   ├── Saadaoui_2026_JCE.dta               ← Primary dataset (from public replication package)
+│   ├── 03_nlp/                             ← Processed NLP panels (GDELT, ICEWS, Phoenix)
+│   └── final/                              ← Merged master panel, variable roles JSON
+│
+└── outputs/
+    ├── 03c/                                ← Composite GPR parquet files
+    ├── 04_diagnostics/                     ← Master panel, first-stage diagnostics
+    ├── 04_dml/                             ← NB05 figures and tables
+    └── 05_panel/                           ← NB06 figures and tables
+```
+
+---
+
+## How to Run
+
+**All notebooks are already executed.** Outputs (figures, tables, printed results) are saved
+inside each notebook and in the `outputs/` directory. You **do not** need to rerun anything to
+see the results. Just open the notebooks in Jupyter or view them on GitHub.
+
+To rerun from scratch:
+
+```bash
 git clone https://github.com/mountaha-ghabri/geopolitical-ml-oil.git
 cd geopolitical-ml-oil
-
-# Install the exact required econometric and data libraries
 pip install -r requirements.txt
 ```
 
-## 📁 Project Architecture
+**Run notebooks in this order:**
 
-**Plaintext**
+| Step | Notebook                                      | Purpose                               | Runtime     |
+| ---- | --------------------------------------------- | ------------------------------------- | ----------- |
+| 1    | `00_explore_and_validate`                   | Data audit, source coverage           | ~90 min     |
+| 2    | `01_baseline_replication_saadaoui`          | LP-IV replication matching Stata      | ~2 min      |
+| 3    | `02_composite_index_construction`           | Build 5-source GPR index              | ~10 sec     |
+| 4    | `03_macro_controls_feature_engineering`     | Download/proxy macro controls         | ~2 min      |
+| 5    | `04_instrument_diagnostics_and_macro_merge` | First-stage F-stats, master panel     | ~1 min      |
+| 6    | `05_dml_quantile_iv_lp_clean`               | **Main single-dyad estimation** | ~60–90 min |
+| 7    | `06_panel_network_causal_forest_merge`      | **Panel + network extension**   | ~50–70 min |
 
-```
-.
-├── data/
-│   ├── 02_features/      # High-dimensional macro control variables & commodity spreads
-│   ├── 03_nlp/           # Parsed bilateral US-China GDELT event matrices (1990-2022)
-│   ├── cache/            # Intermediate serialized Parquet data layers
-│   └── final/            # Consolidated estimation matrices (Baseline, GDELT-enriched)
-├── original/             # Baseline replication source files (Saadaoui_2026_V7.dta, .log)
-├── notebooks/            # The Execution Playbook (01_*.ipynb to 10_*.ipynb)
-├── results/              # Exported main-text CSV tables, Wald criteria, and Appendix DML logs
-└── figures/              # Exported Impulse Response Functions (IRFs) and diagnostic plots
-```
+NB05 and NB06 are the primary outputs. All earlier notebooks feed into them and only need to
+be rerun if you want to change the data pipeline.
 
-## Complete Execution Playbook
+---
 
-The notebooks must be executed sequentially to honor intermediate file linkages. `05_data_merge_and_instrument_validation.ipynb` serves as a vital statistical checkpoint.
+## Data Notes
 
-**Code snippet**
+**What is included in the repository:**
 
-```
-graph TD
-    A[01 Baseline Replication] --> B[02 Macro Features]
-    B --> C[03 GDELT NLP]
-    C --> D[04 Pipeline Parameters]
-    D --> E[05 Merge & Checkpoint]
-    E --> F[06 Appendix DML Audits]
-    E --> G[07 Discrete Regime Splits]
-    E --> H[08 Structural Break Diagnostics]
-    E --> I[09 Multi-Outcome Spillovers]
-    E --> J[10 Multi-Dyad Panel Extension]
-```
+- `Saadaoui_2026_JCE.dta`: the replication dataset from Saadaoui's public GitHub package.
+  Contains bilateral PRI series for several China dyads, macro controls, 1990–2022.
+- Processed NLP output files in `data/03_nlp/`: monthly bilateral panels for GDELT,
+  ICEWS, and Phoenix, already cleaned and standardised.
+- All `outputs/` files: figures and CSVs from each notebook run.
 
-### Phase 1: Replication & Feature Assembly
+**What is NOT included (file size):**
 
-#### 1. `01_baseline_replication_saadaoui.ipynb`
+- Raw GDELT event tables (~40 GB uncompressed). The `data_acquisition/` notebooks
+  reproduce them if needed, but the processed monthly aggregates in `data/03_nlp/` are
+  sufficient for all downstream analysis.
+- Raw ICEWS and Phoenix event-level files. Same reason, processed monthly panels are
+  already in the repository.
+- FinBERT model weights. Downloaded automatically from HuggingFace on first run of NB02.
 
-* **Purpose:** Replicates core Stata code (`Saadaoui_JCE_2026.do`) in Python to verify mathematical identity parity. Documents slight variance in standard errors caused by Python's `IV2SLS` debiased covariance adjustments vs. Stata’s GMM small-sample parameters.
-* **Inputs:** `original/Saadaoui_2026_JCE.dta`
-* **Outputs:** Replicated baseline mean IV-LP plots in `figures/01_baseline_replication/`
-* **Runtime:** ~15 seconds
+---
 
-#### 2. `02_macro_controls_feature_engineering.ipynb`
+## Key Findings
 
-* **Purpose:** Cleans and processes high-signal macro controls (Global Supply Chain Pressure Index, Baltic Dry Index, yield spreads, VIX volatility shifts, commodity spreads).
-* **Inputs:** `data/02_features/raw/bdi.csv`, `data/02_features/raw/gscpi.csv`
-* **Outputs:** Structured control arrays in `data/02_features/`
-* **Runtime:** ~45 minutes
+**Replication.** First-stage F = 242 for Δ²PRI (CHN-USA). LP-IV h=6 β = −0.158*,
+sign reversal at h≈15, h=36 β = +0.152*. Matches Saadaoui (2026) Stata output.
 
-#### 3. `03_gdelt_structured_nlp_features_nb.ipynb`
+**DML (XGBoost depth=3, preferred).** h=6 β = −0.224 (41% larger than baseline).
+Sign pattern preserved. Depth=5 shows overfitting at h=12 and is reported as sensitivity only.
 
-* **Purpose:** Compiles bilateral US-China structural GDELT metrics (Goldstein means, event volume, conflict vs. cooperation shares) across the full 1990–2022 timeline.
-* **Inputs:** Raw historical GDELT event matrix
-* **Outputs:** Long-horizon narrative feature frames in `data/03_nlp/`
-* **Runtime:** ~560 minutes
+**CH-IVQR (Algorithm 1).** At h=6: τ=0.10: −0.252*, τ=0.25: −0.142*, τ=0.50: −0.037 (n.s.),
+τ=0.75: −0.089*, τ=0.90: −0.185*. The median effect is near zero; the LP-IV average is driven
+by tail heterogeneity. At h=24 positive effects concentrate in upper quantiles.
 
-#### 4. `04_finbert_bertopic_deep_nlp.ipynb`
+**Structural break.** Sup-Wald (Andrews 1993) identifies break at 2002-02-01 (EP-3 incident /
+WTO accession), not 2010. Chow tests confirm at h=3, 6, 12, 24.
 
-* **Purpose:** Investigates deep textual pipelines (Pre-trained FinBERT headlines and BERTopic entropy metrics). Maps out why short transformer windows (2015–2022) introduce structural look-ahead bias and sample constraints when paired with long-horizon macro models.
-* **Inputs:** `data/cache/uschn_urls_2015_2022.parquet`
-* **Outputs:** High-dimensional NLP control profiles (treated as exploratory text parameters)
-* **Runtime:** ~200 minutes (GPU dependent)
+**Multiple testing.** 20/49 horizons significant at raw 10%; 6/49 survive BH FDR correction
+(h=28–35). The h=6 result does not survive FDR correction but is confirmed by wild bootstrap.
 
-#### 5. `05_data_merge_and_instrument_validation.ipynb`
+**Panel (8 valid dyads).** Oil importers (CHN-USA, CHN-JPN, CHN-GBR, CHN-AUS) show negative
+h=6 coefficients. Energy exporter (CHN-RUS) shows positive. IVW pooled h=6 = −0.165*.
+Pooled DML (n≈3,000, dyad FE): h=6 = −0.343*, h=36 = +0.378*.
 
-* **Purpose:** Hard data checkpoint. Consolidates macro features and text features into clean matrices. Audits first-stage instrument performance. Constrains the final primary regression control set to a robust **$p=15$** vectors to keep optimal sample convergence limits (**$n/p \approx 25$**).
-* **Inputs:** Engineered macro and text files from steps 01, 02, 03.
-* **Outputs:** `data/final/variable_roles.json`, analytical estimation arrays.
-* **Runtime:** ~ 3 minutes
+**Causal forest.** r(ICEWS attention share, CATE) = −0.803, p < 0.0001. Months when CHN-USA
+commands high share of China's bilateral activity show near-zero CATE, saturation hypothesis
+confirmed.
 
-### Phase 2: Causality Tests & Machine Learning Nuisance Limits
+**Network.** DY total connectedness ≈ 30–40%. GAT attention weights converge to uniform
+(≈0.083 per pair) dominant common factor, not differentiated spillover.
 
-#### 6. `06_double_ml_iv_impulse_responses.ipynb`
+---
 
-* **Purpose:** Conducts instrument diagnostics via Angrist-Fisch Random Forest models and executes directional linear and non-linear XGBoost Granger causality runs. Estimates the Partially Linear IV (PLIV) Double ML models, preserving the resulting high-variance **$0/49$** significant results for the thesis  **Technical Appendix** .
-* **Inputs:** Validated matrices in `data/final/`
-* **Outputs:** Comparative DML vs OLS coefficients in `results/`, diagnostic plots.
-* **Runtime:** ~ 20 minutes (due to cross-fitting iterations)
+## Known Limitations
 
-### Phase 3: Regime Heterogeneity, Structural Breaks, and Panel Assets
+- **Multiple testing.** h=6 does not survive BH correction. Results confirmed by wild bootstrap
+  and Wald joint test but should be read with this caveat.
+- **Composite GPR.** Weak as instrument (F=2.59). Correctly used only as nuisance control.
+- **GAT.** Uniform attention weights indicate the network structure is not informative beyond
+  the common factor. Reported as honest null result.
+- **Meta-regression.** n=8 dyads, severely underpowered. Scatter plots are the valid output;
+  regression coefficients are reported for direction only.
+- **Sample size.** n=385 for CHN-USA. Precision declines at long horizons.
+- **FinBERT coverage** starts 2013; Phoenix SWB ends 2019. Composite GPR coverage varies
+  by source and dyad, documented in NB02.
 
-#### 7. `07_state_dependent_lp.ipynb`
+---
 
-* **Purpose:** Identifies structural state-dependence. Omits weak continuous interaction instruments and implements discrete Subsample Regime Splitting (Ramey & Zubairy topology) across explicit high/low financial stress (VIX) layers.
-* **Inputs:** Target matrices in `data/final/`
-* **Outputs:** `results/wald_vix_regime.csv`, regime split charts in `figures/07_state_dependent_lp/`
-* **Runtime:** ~1 minute
+## Issues and Contact
 
-#### 8. `08_structural_breaks.ipynb`
+If you encounter execution problems, missing files, or have questions about the methodology:
 
-* **Purpose:** Runs formal Chow stability tests across distinct historical pivot dates (e.g., the 2015 trade landscape shift). Explicitly logs why Smooth Transition (STLP-IV) architectures mathematically fail on limited small-sample properties.
-* **Inputs:** Consolidated analytical sheets in `data/final/`
-* **Outputs:** Tabular F-test statistics and break horizons in `results/`
-* **Runtime:** ~45 seconds
+- **Open a GitHub Issue:** [github.com/mountaha-ghabri/geopolitical-ml-oil/issues](https://github.com/mountaha-ghabri/geopolitical-ml-oil/issues)
+- **Email:** moontahaghabry@gmail.com
 
-#### 9. `09_multi_outcome_lp_iv.ipynb`
-
-* **Purpose:** Traces shock propagation across a wide financial grid, measuring spillover magnitude and response ordering across alternative targets (Brent crude, Spot Gold, Safe-Havens, CNY/USD volatility, and the Baltic Dry Index).
-* **Inputs:** Multi-market time series arrays in `data/final/`
-* **Outputs:** Multi-outcome baseline response frames in `results/multi_outcome_summary.csv`
-* **Runtime:** ~1.5 minutes
-
-#### 10. `10_panel.ipynb`
-
-* **Purpose:** Tests geographic external validity by pooling transmission data across 11 separate dyadic combinations using Inverse-Variance Weighted (IVW) panel local projections, evaluating location biases and dyadic heterogeneity.
-* **Inputs:** Multi-country dyadic arrays in `data/final/`
-* **Outputs:** Panel pooled coefficients and heterogeneity metrics (**$I^2$**) in `results/`
-* **Runtime:** ~2 minutes
-
-## Essential Production & Estimation Rules
-
-* **Enforced Modularity:** Notebooks cannot be run out of order. `05_data_merge_and_instrument_validation.ipynb` generates the underlying structural keys; subsequent scripts will throw fatal errors if this validation layer is omitted.
-* **Sample Bounds Restriction:** Given our structural macroeconomic size (**$n=385$**), downstream cross-validation models in the Appendix folders must keep cross-fitting parameters locked tight (`n_folds=3` or `5`) to prevent total validation partition breakdown.
+Please include the notebook name, the cell that failed, and the error message.
