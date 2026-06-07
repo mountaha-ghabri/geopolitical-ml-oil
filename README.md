@@ -81,7 +81,7 @@ pip install -r requirements.txt
 
 | Step | Notebook | Purpose | Runtime |
 |------|----------|---------|---------|
-| 1 | `00_explore_and_validate` | Data audit, source coverage | 80 min |
+| 1 | `00_explore_and_validate` | Data audit, source coverage | ~90 min |
 | 2 | `01_baseline_replication_saadaoui` | LP-IV replication matching Stata | ~2 min |
 | 3 | `02_composite_index_construction` | Build 5-source GPR index | ~10 sec |
 | 4 | `03_macro_controls_feature_engineering` | Download/proxy macro controls | ~2 min |
