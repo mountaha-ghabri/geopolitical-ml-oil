@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Geopolitical Turning Points and Oil Price Dynamics
 
 ### Replication and ML Extension of Saadaoui (2026, Journal of Comparative Economics)
